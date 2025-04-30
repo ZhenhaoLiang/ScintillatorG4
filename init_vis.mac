@@ -1,0 +1,32 @@
+# run.mac
+
+/vis/open OGL  # 或 OGLSX / OGL2 depending on your system
+/vis/viewer/set/viewpointThetaPhi 90 0
+/vis/drawVolume
+/vis/viewer/set/autoRefresh true
+/vis/scene/add/axes 0 0 0 10 cm
+/vis/sceneHandler/attach
+/vis/enable
+
+# 几何体渲染增强
+/vis/viewer/set/style g                  # 使用灰度材质(g)或真实材质(s)
+
+# 轨迹显示设置
+/vis/scene/add/trajectories rich
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set gamma yellow
+/vis/modeling/trajectories/drawByParticleID-0/set e- blue
+/vis/modeling/trajectories/drawByParticleID-0/set e+ green
+
+# 步长和击中点显示
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 3
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawAuxPts true
+
+
+/run/initialize
+
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+/run/beamOn 1
