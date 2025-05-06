@@ -21,10 +21,10 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     // method from the base class
     virtual void GeneratePrimaries(G4Event*);     
-    const G4GeneralParticleSource* GetParticleGun() const {return fGPS;}
+    const G4GeneralParticleSource* GetParticleGun() const {return fParticleGun;}
   
   private:
-    G4GeneralParticleSource* fGPS;
+    G4GeneralParticleSource* fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

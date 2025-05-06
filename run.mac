@@ -1,0 +1,26 @@
+# 初始化
+/run/initialize
+
+# 输出控制
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+
+# 定义粒子源（中子）
+/gps/particle neutron
+
+# 设置源的几何形状（圆柱体）
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/centre 0 0 0 cm  # 中心坐标
+/gps/pos/radius 2 cm      # 半径 2 cm
+/gps/pos/halfz 2 cm       # 半高 2 cm
+
+# 设置粒子方向为各向同性
+/gps/ang/type iso
+
+# 设置能量为 1.35 MeV 单能谱
+/gps/ene/type Mono
+/gps/ene/mono 1.35 MeV    # 单能 1.35 MeV
+
+/run/beamOn 1

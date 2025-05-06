@@ -45,6 +45,7 @@ target_link_libraries(toyMC ${Geant4_LIBRARIES})
 set(EXAMPLEB1_SCRIPTS
   init_vis.mac
   Co60_spectrum.txt
+  run.mac
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})
