@@ -11,6 +11,9 @@
 #include "G4Sphere.hh"
 #include "G4Trd.hh"
 #include <G4Tubs.hh>
+#include "G4LogicalBorderSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4OpticalSurface.hh"
 #include <G4RotationMatrix.hh>
 #include <G4ThreeVector.hh>
 #include <G4UnionSolid.hh>
@@ -42,6 +45,25 @@ void DetectorConstruction::DefineMaterial()
   // Get nist material manager
   G4NistManager* nist = G4NistManager::Instance();
   Air = nist->FindOrBuildMaterial("G4_AIR");
+  const G4int NUMENTRIE = 2;
+
+  // 定义光子能量范围（单位：eV）
+  G4double photonEnergyAir[NUMENTRIE] = {1.5*eV, 10.0*eV};  // ~200nm 到 ~800nm
+
+  // 空气的折射率约为 1.0003
+  G4double rIndexAir[NUMENTRIE] = {1.0003, 1.0003};
+
+  // 创建光学属性表
+  G4MaterialPropertiesTable* mptAir = new G4MaterialPropertiesTable();
+  mptAir->AddProperty("RINDEX", photonEnergyAir, rIndexAir, NUMENTRIE);
+
+  // 可选：加入吸收长度（这里假设非常大，近似透明）
+  G4double absorptionAir[NUMENTRIE] = {1000.*m, 1000.*m};
+  mptAir->AddProperty("ABSLENGTH", photonEnergyAir, absorptionAir, NUMENTRIE);
+
+  // 将属性表附加到材料
+  Air->SetMaterialPropertiesTable(mptAir);
+
   Water = nist->FindOrBuildMaterial("G4_WATER");
   //Co60
   G4Isotope* isoCo60 = new G4Isotope("Co60", 27, 60, 59.933817*g/mole); // Z=27, A=60
@@ -101,6 +123,32 @@ void DetectorConstruction::DefineMaterial()
   mptEJ200->AddConstProperty("YIELDRATIO", 1.0);                // 快速成分比例
   
   EJ200->SetMaterialPropertiesTable(mptEJ200);
+
+  // EJ-200 -> Air
+  G4double ePhoton[] = {2.00*eV, 9.75*eV};
+  const G4int num = sizeof(ePhoton)/sizeof(G4double);
+  stickToAir = new G4OpticalSurface("StickAir");
+
+  stickToAir->SetType(dielectric_dielectric);
+  stickToAir->SetFinish(polished);
+  stickToAir->SetModel(glisur);
+
+  G4double reflectivityStickToAir[] = {0.5, 0.5};// 无反射
+  assert(sizeof(reflectivityStickToAir) == sizeof(ePhoton));
+  G4double efficiencyStickToAir[] = {0.5, 0.5};// 无吸收/再发射
+
+  assert(sizeof(efficiencyStickToAir) == sizeof(ePhoton));
+ 
+  G4MaterialPropertiesTable* stickToAirProperty =
+  new G4MaterialPropertiesTable();
+
+  stickToAirProperty->AddProperty("REFLECTIVITY", ePhoton,
+                                  reflectivityStickToAir, num);
+
+  stickToAirProperty->AddProperty("EFFICIENCY", ePhoton,
+                                  efficiencyStickToAir, num);
+
+  stickToAir->SetMaterialPropertiesTable(stickToAirProperty);
 
   G4cout << "EJ200 : density " <<  EJ200->GetDensity()/(g / cm3) << " , "
          << "NbOfKAtomsPerVolume " << EJ200->GetTotNbOfAtomsPerVolume()/(1. / cm3) /3.0<< G4endl;
@@ -212,6 +260,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                         EJ200,             //its material, Use EJ200 or EJ276
                         "logicScintillator");         //its name
                
+  G4VPhysicalVolume* phyScint =  
   new G4PVPlacement(0,                       //no rotation
                     G4ThreeVector(0,0,0),    //at (0,0,0)
                     logicScintillator,       //its logical volume
@@ -221,6 +270,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     0,                       //copy number
                     checkOverlaps);          //overlaps checking  
                     
+  // Add surface
+  auto EJ200WorldSurface = new G4LogicalBorderSurface("EJ200WorldSurface",phyScint, physWorld, stickToAir);
+  
   //Source==============================================================
   G4RotationMatrix *CylinderRotate = new G4RotationMatrix();
   CylinderRotate->rotateX(90. * deg);
@@ -246,7 +298,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking      
 
   //Detector===============================================================  
-  G4double PMTRadius = 2.4*cm;
+  G4double PMTRadius = 2.54*cm;
   G4Tubs* solidDetector =    
     new G4Tubs("solidDetector",                    //its name
         0,PMTRadius, 1*cm,  0.*deg, 360.*deg); //its size
@@ -254,14 +306,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     new G4LogicalVolume(solidDetector,         //its solid
                         Air,          //its material
                         "Detector");           //its name
+
+  G4VPhysicalVolume* phyDetector =
   new G4PVPlacement(CylinderRotate,                       //no rotation
-                    G4ThreeVector(0,-ScintillatorSize*0.5-1.0*cm,0),   //at position
+                    G4ThreeVector(0,-ScintillatorSize*0.5-1.1*cm,0),   //at position
                     logicDetector,             //its logical volume
                     "Detector",                //its name
                     logicWorld,                //its mother volume  is contanier
                     false,                   //no boolean operation
                     0,                       //copy number
                     checkOverlaps);          //overlaps checking
+
+  new G4LogicalBorderSurface("EJ200WorldSurface",phyDetector, physWorld, stickToAir);
 
   return physWorld;
 }

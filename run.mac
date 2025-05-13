@@ -12,8 +12,8 @@
 # 设置源的几何形状（圆柱体）
 /gps/pos/type Volume
 /gps/pos/shape Cylinder
-/gps/pos/centre 0 0 0 cm  # 中心坐标
-/gps/pos/radius 2 cm      # 半径 2 cm
+/gps/pos/centre 0 7.5 0 cm  # 中心坐标
+/gps/pos/radius 1.5 cm      # 半径 1.5 cm
 /gps/pos/halfz 2 cm       # 半高 2 cm
 
 # 设置粒子方向为各向同性

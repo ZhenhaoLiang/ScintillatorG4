@@ -7,6 +7,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4NistManager.hh"
+#include "G4OpticalSurface.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -26,6 +27,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   protected:
     G4LogicalVolume*  fScoringVolume;
     G4Material *Air,*Water,*Co60,*EJ200,*EJ276;
+    G4OpticalSurface* stickToAir;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
