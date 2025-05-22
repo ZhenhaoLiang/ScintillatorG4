@@ -289,7 +289,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                         "SourceCylinder");         //its name
                
   new G4PVPlacement(CylinderRotate,                       //no rotation
-                    G4ThreeVector(0,SourceHalfLength+ScintillatorSize*0.5 + 2.0*cm,0),         //at (0,0,0)
+                    G4ThreeVector(0,SourceHalfLength+ScintillatorSize*0.5,0),         //at (0,0,0)
                     logicSourceCylinder,                //its logical volume
                     "SourceCylinder",              //its name
                     logicWorld,              //its mother  volume

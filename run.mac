@@ -12,15 +12,19 @@
 # 设置源的几何形状（圆柱体）
 /gps/pos/type Volume
 /gps/pos/shape Cylinder
-/gps/pos/centre 0 7.5 0 cm  # 中心坐标
-/gps/pos/radius 1.5 cm      # 半径 1.5 cm
+/gps/pos/centre 0 5 0 cm  # 中心坐标
+/gps/pos/radius 2 cm      # 半径 2 cm
 /gps/pos/halfz 2 cm       # 半高 2 cm
 
 # 设置粒子方向为各向同性
 /gps/ang/type iso
 
 # 设置能量为 1.35 MeV 单能谱
-/gps/ene/type Mono
-/gps/ene/mono 1.35 MeV    # 单能 1.35 MeV
+/gps/ene/type arb
+/gps/hist/point 1.17  0.7   
+/gps/hist/point 1.33 1
+
+/gps/hist/inter Line
 
 /run/beamOn 1
+
