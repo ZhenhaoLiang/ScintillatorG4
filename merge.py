@@ -39,7 +39,7 @@ for ind, f in tqdm.tqdm(enumerate(file_list)):
                            tr_ttree='event',
                            step_vals=step_vals)
     if isinstance(_df,pd.DataFrame):
-        _df.eventID += count * 10000000
+        _df.eventID += count * 50 
         count = count + 1
         df = pd.concat((df, _df), ignore_index=True)
 
