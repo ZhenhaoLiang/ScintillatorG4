@@ -5,6 +5,12 @@
 /control/verbose 1
 /run/verbose 1
 /tracking/verbose 0
+# 关闭光学相关日志
+/optical/verbose 0
+/process/optical/verbose 0
+/process/scintillation/verbose 0
+/process/cerenkov/verbose 0
+/process/wls/verbose 0
 
 # 定义粒子源（中子）
 /gps/particle gamma 
@@ -24,5 +30,5 @@
 
 /gps/hist/inter Lin
 
-/run/beamOn 1 
+/run/beamOn 10000 
 
