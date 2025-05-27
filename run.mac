@@ -7,24 +7,22 @@
 /tracking/verbose 0
 
 # 定义粒子源（中子）
-/gps/particle neutron
+/gps/particle gamma 
 
 # 设置源的几何形状（圆柱体）
-/gps/pos/type Volume
-/gps/pos/shape Cylinder
-/gps/pos/centre 0 5 0 cm  # 中心坐标
-/gps/pos/radius 2 cm      # 半径 2 cm
-/gps/pos/halfz 2 cm       # 半高 2 cm
+/gps/position 0 3.1 0 cm  # 中心坐标
 
 # 设置粒子方向为各向同性
 /gps/ang/type iso
 
 # 设置能量为 1.35 MeV 单能谱
-/gps/ene/type arb
+/gps/ene/type Arb
+/gps/hist/type arb
+
 /gps/hist/point 1.17  0.7   
 /gps/hist/point 1.33 1
 
-/gps/hist/inter Line
+/gps/hist/inter Lin
 
-/run/beamOn 1
+/run/beamOn 1 
 

@@ -26,7 +26,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     
   protected:
     G4LogicalVolume*  fScoringVolume;
-    G4Material *Air,*Water,*Co60,*EJ200,*EJ276;
+    G4Material *Al,*Air,*Water,*Co60,*EJ200,*EJ276;
     G4OpticalSurface* stickToAir;
 };
 

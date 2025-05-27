@@ -65,6 +65,7 @@ void DetectorConstruction::DefineMaterial()
   Air->SetMaterialPropertiesTable(mptAir);
 
   Water = nist->FindOrBuildMaterial("G4_WATER");
+  Al = nist->FindOrBuildMaterial("G4_Al");
   //Co60
   G4Isotope* isoCo60 = new G4Isotope("Co60", 27, 60, 59.933817*g/mole); // Z=27, A=60
     
@@ -236,7 +237,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
       
   G4LogicalVolume* logicWorld =                         
     new G4LogicalVolume(solidWorld,          //its solid
-                        Air,           //its material
+                        Al,           //its material
                         "World");            //its name
                                    
   G4VPhysicalVolume* physWorld = 
@@ -276,16 +277,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //Source==============================================================
   G4RotationMatrix *CylinderRotate = new G4RotationMatrix();
   CylinderRotate->rotateX(90. * deg);
-  G4double SourceRadius = 1.5*cm;
-  G4double SourceHalfLength = 2.0*cm;
+  G4double InnerSourceRadius = 2.5*0.5*cm;
+  G4double OutterSourceRadius = 3.5*0.5*cm;
+  G4double SourceHalfLength = 0.2*cm;
 
   G4Tubs* solidSourceCylinder =    
     new G4Tubs("SourceCylinder",                    //its name
-        0,SourceRadius, SourceHalfLength, 0.*deg, 360.*deg); //its size
+        InnerSourceRadius,OutterSourceRadius, SourceHalfLength, 0.*deg, 360.*deg); //its size
       
   G4LogicalVolume* logicSourceCylinder =                         
     new G4LogicalVolume(solidSourceCylinder,            //its solid
-                        Co60,             //its material
+                        Air,             //its material
                         "SourceCylinder");         //its name
                
   new G4PVPlacement(CylinderRotate,                       //no rotation
