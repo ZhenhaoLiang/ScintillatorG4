@@ -43,8 +43,4 @@ for ind, f in tqdm.tqdm(enumerate(file_list)):
         count = count + 1
         df = pd.concat((df, _df), ignore_index=True)
 
-df.loc[:, 'step'] = 1
-for i in range(1,len(df)):
-    if (df.loc[i].ptype == df.loc[i-1].ptype) & (df.loc[i].eventID == df.loc[i-1].eventID) &(df.loc[i].trackID == df.loc[i-1].trackID):
-        df.loc[i,'step'] = df.loc[i-1,'step'] + 1
 df.to_csv("out/merge.csv", index=False)
